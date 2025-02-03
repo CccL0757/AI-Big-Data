@@ -4,9 +4,9 @@ import textblob
 import os
 import google.generativeai as genai
 
-#api = os.getenv("makersuite")
-genai.configure(api_key="AIzaSyCOzen0XMTIpmnddCs54VoB-pBQzNkmAUE") 
-model=genai.GenerativeModel("gemini-1.5-flash")
+api = os.getenv("makersuite")
+genai.configure(api_key=api)
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 app = Flask(__name__)
 
@@ -29,7 +29,7 @@ def SA_result():
     r = textblob.TextBlob(q).sentiment
     return(render_template("SA_result.html",r=r))
 
-@app.route("/SA",methods=["GET","POST"])
+@app.route("/genAI",methods=["GET","POST"])
 def genAI():
     return(render_template("genAI.html"))
 
@@ -38,6 +38,10 @@ def genAI_result():
     q = request.form.get("q")
     r = model.generate_content(q)
     return(render_template("genAI_result.html",r=r.candidates[0].content.parts[0].text))
+
+@app.route("/paynow",methods=["GET","POST"])
+def paynow():
+    return(render_template("paynow.html"))
 
 if __name__ == "__main__":
     app.run()
